@@ -30,7 +30,7 @@ def parse_line(line):
 final_output = []
 for line in sys.stdin:
     l = parse_line(line)
-    if l.iter_num == 50:
+    if l.iter_num == 3:
         final_output.append(l)
     else:
         sys.stdout.write(line)
