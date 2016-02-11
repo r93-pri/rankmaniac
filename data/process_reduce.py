@@ -5,7 +5,7 @@ import sys
 from collections import namedtuple
 
 Line = namedtuple('Line', 'node_num iter_num pr prev_pr connected_nodes')
-NUM_ITERS = 50
+NUM_ITERS = 1
 
 def parse_line(line):
     l = line.strip().split("\t")
@@ -29,9 +29,6 @@ def stringify_Line(l):
     output += "\n"
     return output
 
-#
-# This program simply represents the identity function.
-#
 final_output = []
 line = sys.stdin.readline()
 if line.startswith("FinalRank"):
