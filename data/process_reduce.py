@@ -2,7 +2,6 @@
 
 import sys
 
-
 from collections import namedtuple
 
 Line = namedtuple('Line', 'node_num iter_num pr prev_pr connected_nodes')
@@ -30,10 +29,10 @@ def parse_line(line):
 final_output = []
 for line in sys.stdin:
     l = parse_line(line)
-    if l.iter_num == 3:
-        final_output.append(l)
-    else:
-        sys.stdout.write(line)
+    final_output.append(l)
+
+# sort in descending order by pagerank
+final_output = sorted(final_output, key=lambda line: line.pr, reverse=True)
 
 for l in final_output[:20]:
     print "FinalRank:" + str(l.pr) + "\t" + str(l.node_num)
