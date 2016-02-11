@@ -35,6 +35,12 @@ def stringify_Line(l, incoming_pr):
     return output
 
 def map_pr(l):
+    if len(l.connected_nodes) == 0:
+        if l.node_num in intermediates:
+            intermediates[l.node_num].append(l.pr)
+        else:
+            intermediates[l.node_num] = [l.pr]
+
     for node in l.connected_nodes:
         # collect pageranks of incoming links
         if node in intermediates:
