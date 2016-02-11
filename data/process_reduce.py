@@ -5,6 +5,7 @@ import sys
 from collections import namedtuple
 
 Line = namedtuple('Line', 'node_num iter_num pr prev_pr connected_nodes')
+NUM_ITERS = 50
 
 def parse_line(line):
     l = line.strip().split("\t")
@@ -32,13 +33,25 @@ def stringify_Line(l):
 # This program simply represents the identity function.
 #
 final_output = []
+line = sys.stdin.readline()
+if line.startswith("FinalRank"):
+    final_output.append(line)
+    for line in sys.stdin:
+        final_output.append(line)
+    for line in reversed(final_output):
+        sys.stdout.write(line)
+    sys.exit()
+else:
+    l = parse_line(line)
+    final_output.append(l)
+
 for line in sys.stdin:
     l = parse_line(line)
     final_output.append(l)
 
 avg_diff = sum([abs(line.pr - line.prev_pr) for line in final_output]) / len(final_output)
 
-if avg_diff < 0.00001 or final_output[0].iter_num == 50:
+if avg_diff < 0.00001 or final_output[0].iter_num == NUM_ITERS:
     # sort in descending order by pagerank
     final_output = sorted(final_output, key=lambda line: line.pr, reverse=True)
 

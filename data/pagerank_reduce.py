@@ -47,8 +47,18 @@ def reduce_pr(l):
 # This program simply represents the identity function.
 #
 
-for line in sys.stdin:
+line = sys.stdin.readline()
+if line.startswith("FinalRank"):
+    sys.stdout.write(line)
+    for line in sys.stdin:
+        sys.stdout.write(line)
+    sys.exit()
+else:
     l = parse_line(line)
     l = reduce_pr(l)
     sys.stdout.write(stringify_Line(l))
 
+for line in sys.stdin:
+    l = parse_line(line)
+    l = reduce_pr(l)
+    sys.stdout.write(stringify_Line(l))
