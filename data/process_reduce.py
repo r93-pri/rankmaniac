@@ -61,7 +61,7 @@ for i in top_indices:
     rank -= 1
 
 if not changed or final_output[0].iter_num == NUM_ITERS:
-    for i in reversed(top_indices):
+    for i in reversed(top_indices[-20:]):
         l = final_output[i]
         print "FinalRank:" + str(l.pr) + "\t" + str(l.node_num)
     sys.exit(1)
