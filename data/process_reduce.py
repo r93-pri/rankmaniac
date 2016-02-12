@@ -32,18 +32,6 @@ def stringify_Line(l):
 
 
 final_output = []
-line = sys.stdin.readline()
-if line.startswith("FinalRank"):
-    final_output.append(line)
-    for line in sys.stdin:
-        final_output.append(line)
-    for line in reversed(final_output):
-        sys.stdout.write(line)
-    sys.exit()
-
-l = parse_line(line)
-final_output.append(l)
-
 for line in sys.stdin:
     l = parse_line(line)
     final_output.append(l)
@@ -56,6 +44,7 @@ if avg_diff < 0.00001 or final_output[0].iter_num == NUM_ITERS:
 
     for l in final_output[:20]:
         print "FinalRank:" + str(l.pr) + "\t" + str(l.node_num)
+    sys.exit(1)
 else:
     for l in final_output:
         sys.stdout.write(stringify_Line(l))

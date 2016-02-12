@@ -43,18 +43,6 @@ def map_pr(l):
 
 
 lines = []
-line = sys.stdin.readline()
-if line.startswith("FinalRank"):
-    sys.stdout.write(line)
-    for line in sys.stdin:
-        sys.stdout.write(line)
-    sys.exit()
-
-l = parse_line(line)
-l = l._replace(iter_num=(l.iter_num + 1))  # We increment the number of iterations each time
-map_pr(l) # add node's pagerank / degree to each page it links to
-sys.stdout.write(stringify_Line(l))
-
 for line in sys.stdin:
     l = parse_line(line)
     l = l._replace(iter_num=(l.iter_num + 1))  # We increment the number of iterations each time

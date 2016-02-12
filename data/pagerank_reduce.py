@@ -54,18 +54,9 @@ def reduce_pr(l):
     return l
 
 
-line = sys.stdin.readline()
-if line.startswith("FinalRank"):
-    sys.stdout.write(line)
-    for line in sys.stdin:
-        sys.stdout.write(line)
-    sys.exit()
-
-parse_line(line)
-
 for line in sys.stdin:
     parse_line(line)
-    
+
 for l in nodes:
     l = reduce_pr(l)
     sys.stdout.write(stringify_Line(l))
