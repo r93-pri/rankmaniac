@@ -64,7 +64,9 @@ if not changed or final_output[0].iter_num == NUM_ITERS:
     for i in reversed(top_indices[-20:]):
         l = final_output[i]
         print "FinalRank:" + str(l.pr) + "\t" + str(l.node_num)
-    sys.exit(1)
+
+    # IMPORTANT: CHANGE THIS TO sys.exit(1) FOR LOCAL TESTING
+    sys.exit()
 else:
     # Clear ranks that were not updated
     for i in rest_indices:
@@ -72,4 +74,3 @@ else:
 
     for l in final_output:
         sys.stdout.write(stringify_Line(l))
-

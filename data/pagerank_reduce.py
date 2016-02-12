@@ -31,11 +31,6 @@ def parse_line(line):
         pr = float(value[2])
         prev_pr = float(value[3])
         connected_nodes = map(int, value[4:]) if len(value) > 3 else []
-        if len(l) == 3:
-            incoming_pr = map(float, l[2].split(","))
-        else:
-            incoming_pr = []
-
         nodes.append(Line(node_num, iter_num, rank, pr, prev_pr, connected_nodes))
 
 def stringify_Line(l):
