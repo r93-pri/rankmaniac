@@ -48,10 +48,6 @@ def map_pr(l):
         else:
             intermediates[node] = [l.pr / len(l.connected_nodes)]
 
-
-#
-# This program simply represents the identity function.
-#
 lines = []
 line = sys.stdin.readline()
 if line.startswith("FinalRank"):
@@ -59,11 +55,11 @@ if line.startswith("FinalRank"):
     for line in sys.stdin:
         sys.stdout.write(line)
     sys.exit()
-else:
-    l = parse_line(line)
-    l = l._replace(iter_num=(l.iter_num + 1))  # We increment the number of iterations each time
-    map_pr(l) # add node's pagerank / degree to each page it links to
-    lines.append(l)
+
+l = parse_line(line)
+l = l._replace(iter_num=(l.iter_num + 1))  # We increment the iteration number each time
+map_pr(l) # add node's pagerank / degree to each page it links to
+lines.append(l)
 
 for line in sys.stdin:
     l = parse_line(line)
