@@ -40,7 +40,6 @@ def map_pr(l):
         emission = "NodeId:" + str(node) + "\t" + str(l.pr / len(l.connected_nodes)) + "\n"
         sys.stdout.write(emission)
 
-
 lines = []
 line = sys.stdin.readline()
 if line.startswith("FinalRank"):
