@@ -5,7 +5,6 @@ import sys
 from collections import namedtuple
 
 Line = namedtuple('Line', 'node_num iter_num pr prev_pr connected_nodes')
-intermediates = {}
 
 def parse_line(line):
     l = line.strip().split("\t")
@@ -23,35 +22,25 @@ def parse_line(line):
     connected_nodes = map(int, value[3:]) if len(value) > 3 else []
     return Line(node_num, iter_num, pr, prev_pr, connected_nodes)
 
-def stringify_Line(l, incoming_pr):
+def stringify_Line(l):
     output = "NodeId:" + str(l.node_num) + "\t"
     output += "i" + str(l.iter_num) + "," + str(l.pr) + "," + str(l.prev_pr)
     if len(l.connected_nodes) > 0:
         output += "," + (','.join(map(str, l.connected_nodes)))
-    output += "\t"
-    if len(incoming_pr) > 0:
-        output += ','.join(map(str, incoming_pr))
     output += "\n"
     return output
 
 def map_pr(l):
     if len(l.connected_nodes) == 0:
-        if l.node_num in intermediates:
-            intermediates[l.node_num].append(l.pr)
-        else:
-            intermediates[l.node_num] = [l.pr]
+        emission = "NodeId:" + str(l.node_num) + "\t" + str(l.pr) + "\n"
+        sys.stdout.write(emission)
 
     for node in l.connected_nodes:
         # collect pageranks of incoming links
-        if node in intermediates:
-            intermediates[node].append(l.pr / len(l.connected_nodes))
-        else:
-            intermediates[node] = [l.pr / len(l.connected_nodes)]
+        emission = "NodeId:" + str(node) + "\t" + str(l.pr / len(l.connected_nodes)) + "\n"
+        sys.stdout.write(emission)
 
 
-#
-# This program simply represents the identity function.
-#
 lines = []
 line = sys.stdin.readline()
 if line.startswith("FinalRank"):
@@ -59,18 +48,14 @@ if line.startswith("FinalRank"):
     for line in sys.stdin:
         sys.stdout.write(line)
     sys.exit()
-else:
-    l = parse_line(line)
-    l = l._replace(iter_num=(l.iter_num + 1))  # We increment the number of iterations each time
-    map_pr(l) # add node's pagerank / degree to each page it links to
-    lines.append(l)
+
+l = parse_line(line)
+l = l._replace(iter_num=(l.iter_num + 1))  # We increment the number of iterations each time
+map_pr(l) # add node's pagerank / degree to each page it links to
+sys.stdout.write(stringify_Line(l))
 
 for line in sys.stdin:
     l = parse_line(line)
     l = l._replace(iter_num=(l.iter_num + 1))  # We increment the number of iterations each time
     map_pr(l) # add node's pagerank / degree to each page it links to
-    lines.append(l)
-
-for l in lines:
-    incoming_pr = intermediates[l.node_num] if l.node_num in intermediates else []
-    sys.stdout.write(stringify_Line(l, incoming_pr))
+    sys.stdout.write(stringify_Line(l))

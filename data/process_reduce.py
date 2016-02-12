@@ -5,7 +5,7 @@ import sys
 from collections import namedtuple
 
 Line = namedtuple('Line', 'node_num iter_num pr prev_pr connected_nodes')
-NUM_ITERS = 1
+NUM_ITERS = 50
 
 def parse_line(line):
     l = line.strip().split("\t")
@@ -38,9 +38,9 @@ if line.startswith("FinalRank"):
     for line in reversed(final_output):
         sys.stdout.write(line)
     sys.exit()
-else:
-    l = parse_line(line)
-    final_output.append(l)
+
+l = parse_line(line)
+final_output.append(l)
 
 for line in sys.stdin:
     l = parse_line(line)
