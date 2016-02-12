@@ -44,18 +44,6 @@ def stringify_Line(l):
 
 
 final_output = []
-line = sys.stdin.readline()
-if line.startswith("FinalRank"):
-    final_output.append(line)
-    for line in sys.stdin:
-        final_output.append(line)
-    for line in reversed(final_output):
-        sys.stdout.write(line)
-    sys.exit()
-
-l = parse_line(line)
-final_output.append(l)
-
 for line in sys.stdin:
     l = parse_line(line)
     final_output.append(l)
@@ -76,7 +64,7 @@ if not changed or final_output[0].iter_num == NUM_ITERS:
     for i in reversed(top_indices):
         l = final_output[i]
         print "FinalRank:" + str(l.pr) + "\t" + str(l.node_num)
-
+    sys.exit(1)
 else:
     # Clear ranks that were not updated
     for i in rest_indices:
