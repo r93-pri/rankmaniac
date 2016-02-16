@@ -15,14 +15,14 @@ In order to analyze performance in local testing, we needed a dataset much bigge
 We also needed a way to easily run multiple iterations of the entire process locally, so we created a local_test.py script which constructs a terminal command by concatenating an extra-iteration command string some number of times. Our first implementation simply piped the scripts together, which worked well until we started attempting to print FinalRank and exit early before the last iteration. Since pipes ignore regular process exit status codes, the pipe would just pass the FinalRank output on to the next process, which would not be able to parse the input. To fix this, we added a sys.exit(1) call after printing FinalRank and strung the commands together using && and file input/output so that the whole sequence stops as soon as one process “fails” (finishes).
 
 
-    x **=** int(sys**.**argv[1])
-    **assert** x **>** 0
+    x = int(sys.argv[1])
+    assert x > 0
     
-    cmd **=** "(python pagerank_map.py < input.txt | sort > tmpA.txt && python pagerank_reduce.py < tmpA.txt > tmpB.txt && python process_map.py < tmpB.txt | sort > tmpA.txt && python process_reduce.py < tmpA.txt"
-    cmd **+=** (x **-** 1) ***** " > tmpB.txt && python pagerank_map.py < tmpB.txt | sort > tmpA.txt && python pagerank_reduce.py < tmpA.txt > tmpB.txt && python process_map.py < tmpB.txt | sort > tmpA.txt && python process_reduce.py < tmpA.txt"
-    cmd **+=** " && rm tmpA.txt tmpB.txt ) || (cat tmpB.txt && rm tmpA.txt tmpB.txt)"
+    cmd = "(python pagerank_map.py < input.txt | sort > tmpA.txt && python pagerank_reduce.py < tmpA.txt > tmpB.txt && python process_map.py < tmpB.txt | sort > tmpA.txt && python process_reduce.py < tmpA.txt"
+    cmd += (x - 1) * " > tmpB.txt && python pagerank_map.py < tmpB.txt | sort > tmpA.txt && python pagerank_reduce.py < tmpA.txt > tmpB.txt && python process_map.py < tmpB.txt | sort > tmpA.txt && python process_reduce.py < tmpA.txt"
+    cmd += " && rm tmpA.txt tmpB.txt ) || (cat tmpB.txt && rm tmpA.txt tmpB.txt)"
     
-    os**.**system(cmd)
+    os.system(cmd)
 ## PageRank
 
 PageRank calculates the importance of web pages based on how many pages link to some page. It is determined by first representing the network as a transition matrix αP + (1−α)/n * (1n×n) where P describes the probability of moving from one page to another. α is the dampening factor, which represents the probability that a person decides to continue clicking links. The PageRank of the sites in the network is found by calculating the stationary distribution of that transition matrix. Since a 1 is placed in the Pi,i position for site i if it does not have any outgoing links, pages with no outgoing links are favored with a higher PageRank. The stationary distribution can be solved directly by finding r such that r = rαP + (1−α)/n * (1n×n) and the values of r sum up to 1. This results in a systems of equations relating r and the transition matrix.
@@ -75,6 +75,6 @@ This paper describes an algorithm called F-Rank that can efficiently find the no
 
 Expressing this algorithm as a map-reduce problem proved not to be straightforward. Each iteration involves computing the upper and lower bound, but each of these computations themselves require a breadth-first search. Though it is possible to do a breadth-first search using map-reduce, it’s uncertain how this ought to be structured in the case where a breadth-first search must be performed in every iteration of the algorithm. Specifically, map-reduce BFS requires multiple map and reduce calls with every iteration, but we cannot have multiple `BFS_map` and `BFS_reduce` calls per single `PR_map` and `PR_reduce` call. Further, traversing the graph as such would require a different program structure as the graph data of all nodes would have to be present during each map stage, and some preprocessing would be required to make the data representation ideal for BFS (since the graph data is currently stored as an adjacency list).
 
-# Individual Contributions
+### Individual Contributions
 
 Alex focused on parsing, data structures, Python optimizations, and the local testing scripts/data. Mimi implemented PageRank and ensured correct ordering of results. Jaden focused on researching optimization strategies and implementing the stopping condition optimization. 
